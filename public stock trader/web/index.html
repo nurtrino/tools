@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Public Company Analyser</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="ambient">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+  </div>
+
+  <main class="shell">
+    <header class="topbar panel">
+      <div class="brand">
+        <span class="logo-dot"></span>
+        <h1>Public Company Analyser</h1>
+      </div>
+      <form id="search" class="search">
+        <input id="ticker" type="text" placeholder="Ticker — e.g. AAPL" autocomplete="off" spellcheck="false" />
+        <button id="go" type="submit">Analyze</button>
+      </form>
+    </header>
+
+    <section id="status" class="status hidden"></section>
+
+    <div id="result" class="result hidden">
+
+      <!-- Verdict -->
+      <section class="verdict panel">
+        <div class="verdict-id">
+          <div id="logo-tile" class="logo-tile hidden"><img id="logo" alt="" /></div>
+          <div>
+            <h2 id="company-name">—</h2>
+            <div class="sub"><span id="ticker-chip" class="chip">—</span><span id="industry" class="muted"></span></div>
+          </div>
+        </div>
+        <div class="verdict-price">
+          <div id="price" class="price">—</div>
+          <div id="price-change" class="price-change muted"></div>
+        </div>
+        <div class="verdict-rating">
+          <div class="rating-col">
+            <div id="rating-badge" class="rating-badge">—</div>
+            <div class="muted small">Avg of Wall Street analyst ratings</div>
+          </div>
+          <div class="gauge">
+            <svg viewBox="0 0 120 120" class="gauge-svg">
+              <circle class="gauge-track" cx="60" cy="60" r="52" />
+              <circle id="gauge-arc" class="gauge-arc" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="gauge-center"><span id="composite-score">0</span><small>/ 100</small></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analyst consensus + price target -->
+      <section id="analyst-wrap" class="panel section">
+        <h3>Wall Street consensus <span class="muted small">— named ratings from the major research houses</span></h3>
+        <div id="analyst" class="analyst-body"></div>
+      </section>
+
+      <!-- AI news desk -->
+      <section id="news-wrap" class="panel section">
+        <h3>News &amp; catalysts <span class="muted small">— most important recent news, found &amp; summarized by AI</span></h3>
+        <div id="news" class="news-body"></div>
+      </section>
+
+      <!-- Price chart -->
+      <section id="chart-wrap" class="panel section">
+        <h3>Price chart</h3>
+        <div id="chart-host" class="chart-host"></div>
+        <div id="chart-note" class="muted small"></div>
+      </section>
+
+      <!-- Earnings -->
+      <section id="earnings-wrap" class="panel section">
+        <h3>Earnings</h3>
+        <div id="earnings" class="earnings-body"></div>
+      </section>
+
+      <!-- Valuation metrics -->
+      <section id="valuation-wrap" class="panel section">
+        <h3>Valuation &amp; quality metrics</h3>
+        <div id="valuation" class="metric-groups"></div>
+      </section>
+
+      <!-- SEC financials -->
+      <section id="financials-wrap" class="panel section">
+        <h3>SEC financial statements <span class="muted small">— from EDGAR XBRL</span></h3>
+        <div id="financials" class="financials-body"></div>
+      </section>
+
+      <!-- DCF -->
+      <section id="dcf-wrap" class="panel section">
+        <h3>Discounted cash flow</h3>
+        <div id="dcf" class="dcf-body"></div>
+      </section>
+
+      <!-- Filings & IR -->
+      <section id="filings-wrap" class="panel section">
+        <h3>Filings &amp; investor relations</h3>
+        <div id="filings" class="filings-body"></div>
+      </section>
+
+      <!-- Forensic & quality scores -->
+      <section id="scores-wrap" class="panel section">
+        <h3>Forensic &amp; quality scores</h3>
+        <div id="scores" class="scores-body"></div>
+      </section>
+
+      <!-- Scorecard (kept at the bottom) -->
+      <section class="panel section">
+        <h3>Scorecard <span class="muted small">— factor reference; does not set the rating</span></h3>
+        <div id="pillars" class="pillars"></div>
+      </section>
+
+      <!-- Meta -->
+      <section class="panel section meta">
+        <div><h4>Data sources</h4><div id="sources" class="tags"></div></div>
+        <div id="warnings-wrap" class="hidden"><h4>Notes</h4><ul id="warnings" class="warnings"></ul></div>
+      </section>
+
+      <p class="disclaimer muted small">
+        Research tool only — not financial advice. The headline rating is the average of Wall Street
+        analyst ratings; the scorecard pillars are shown for reference and no longer set it; the AI only summarizes news.
+      </p>
+    </div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
