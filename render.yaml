@@ -1,0 +1,7 @@
+services:
+  # Scandinavia Spring Break 2027 — living itinerary (static, no build step)
+  - type: web
+    name: scandinavia-trip
+    runtime: static
+    rootDir: scandinavia-trip
+    staticPublishPath: .

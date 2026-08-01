@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scandinavia · Spring 2027</title>
+  <meta name="description" content="A living itinerary — Chicago to Scandinavia, March 26 – April 5, 2027." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+
+  <!-- Animated aurora backdrop -->
+  <div class="sky" aria-hidden="true">
+    <div class="stars"></div>
+    <div class="aurora aurora-1"></div>
+    <div class="aurora aurora-2"></div>
+    <div class="aurora aurora-3"></div>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#top">SCANDINAVIA<span class="brand-tick">·27</span></a>
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button class="tab active" role="tab" aria-selected="true" data-view="itinerary">Itinerary</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="calendar">Calendar</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="map">Map</button>
+      <span class="tab-glider" aria-hidden="true"></span>
+    </nav>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" id="btn-add" title="Add a plan">＋ Add</button>
+      <button class="btn btn-primary" id="btn-export" title="Download as a Word document">Export&nbsp;<span class="docx-chip">.docx</span></button>
+    </div>
+  </header>
+
+  <section class="hero" id="top">
+    <p class="hero-eyebrow reveal">ORD&nbsp;&nbsp;✈&nbsp;&nbsp;THE&nbsp;NORTH</p>
+    <h1 class="hero-title" id="hero-title" aria-label="Scandinavia">Scandinavia</h1>
+    <p class="hero-dates reveal">March 26 — April 5, 2027</p>
+    <div class="countdown reveal" id="countdown" aria-label="Countdown to departure">
+      <div class="count-cell"><span class="count-num" id="cd-days">—</span><span class="count-label">days</span></div>
+      <div class="count-sep">:</div>
+      <div class="count-cell"><span class="count-num" id="cd-hours">—</span><span class="count-label">hours</span></div>
+      <div class="count-sep">:</div>
+      <div class="count-cell"><span class="count-num" id="cd-mins">—</span><span class="count-label">min</span></div>
+      <div class="count-sep">:</div>
+      <div class="count-cell"><span class="count-num" id="cd-secs">—</span><span class="count-label">sec</span></div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"><span></span></div>
+  </section>
+
+  <main id="main">
+
+    <!-- ITINERARY -->
+    <section class="view active" id="view-itinerary" role="tabpanel">
+      <div class="stats-strip" id="stats"></div>
+      <ol class="timeline" id="timeline"></ol>
+      <section class="ideas" id="ideas-section">
+        <h2 class="section-title">Idea shelf</h2>
+        <p class="section-sub">Unscheduled sparks — things worth doing, not yet pinned to a day.</p>
+        <div class="ideas-grid" id="ideas"></div>
+      </section>
+    </section>
+
+    <!-- CALENDAR -->
+    <section class="view" id="view-calendar" role="tabpanel" hidden>
+      <div class="calendars" id="calendars"></div>
+      <div class="cal-detail" id="cal-detail" hidden></div>
+    </section>
+
+    <!-- MAP -->
+    <section class="view" id="view-map" role="tabpanel" hidden>
+      <div class="map-wrap">
+        <div id="map"></div>
+        <div class="map-empty" id="map-empty" hidden>
+          <p class="map-empty-title">The map is waiting.</p>
+          <p>Add a plan with a location and it appears here.</p>
+        </div>
+        <div class="map-legend" id="map-legend"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p>A living itinerary · edit <code>data/trip-data.js</code> or use ＋ Add</p>
+    <button class="btn btn-ghost btn-small" id="btn-sync">Sync local changes</button>
+  </footer>
+
+  <!-- ADD EVENT MODAL -->
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head">
+        <h2 id="modal-title">Add a plan</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      </div>
+      <form id="add-form">
+        <div class="form-row">
+          <label class="field">
+            <span>Day</span>
+            <select id="f-date" required></select>
+          </label>
+          <label class="field field-small">
+            <span>Time <em>optional</em></span>
+            <input type="time" id="f-time" />
+          </label>
+        </div>
+        <label class="field">
+          <span>Title</span>
+          <input type="text" id="f-title" required placeholder="e.g. Fjord kayaking" autocomplete="off" />
+        </label>
+        <div class="form-row">
+          <label class="field">
+            <span>Type</span>
+            <select id="f-type">
+              <option value="sight">Sight</option>
+              <option value="food">Food &amp; drink</option>
+              <option value="museum">Museum</option>
+              <option value="nature">Nature</option>
+              <option value="flight">Flight</option>
+              <option value="transit">Transit</option>
+              <option value="lodging">Lodging</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Place name <em>optional</em></span>
+            <input type="text" id="f-place" placeholder="Nyhavn, Copenhagen" autocomplete="off" />
+          </label>
+        </div>
+        <div class="form-row">
+          <label class="field field-small">
+            <span>Lat <em>optional</em></span>
+            <input type="text" id="f-lat" inputmode="decimal" placeholder="55.6797" />
+          </label>
+          <label class="field field-small">
+            <span>Lng <em>optional</em></span>
+            <input type="text" id="f-lng" inputmode="decimal" placeholder="12.5989" />
+          </label>
+        </div>
+        <label class="field">
+          <span>Notes <em>optional</em></span>
+          <textarea id="f-notes" rows="2" placeholder="Tickets, timing, links…"></textarea>
+        </label>
+        <p class="form-hint">Saved in this browser. Use <strong>Sync local changes</strong> to fold it into the repo’s data file.</p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add to trip</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SYNC DRAWER -->
+  <div class="modal-backdrop" id="sync-backdrop" hidden>
+    <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="sync-title">
+      <div class="modal-head">
+        <h2 id="sync-title">Sync local changes</h2>
+        <button class="modal-close" id="sync-close" aria-label="Close">✕</button>
+      </div>
+      <p class="sync-blurb">
+        Everything below is your live data — repo file <em>plus</em> anything added in this browser.
+        Copy it over <code>data/trip-data.js</code> and commit (or paste it to Claude), then
+        <strong>Clear local</strong> so nothing is double-counted.
+      </p>
+      <textarea id="sync-out" class="sync-out" readonly spellcheck="false"></textarea>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="btn-clear-local">Clear local additions</button>
+        <button class="btn btn-primary" id="btn-copy-sync">Copy to clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="vendor/docx/docx.iife.js"></script>
+  <script src="data/trip-data.js"></script>
+  <script src="js/export-docx.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
