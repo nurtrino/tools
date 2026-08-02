@@ -7,12 +7,34 @@ Designed like a printed field itinerary: warm paper, ink hairlines, Fraunces
 display type, Newsreader text, IBM Plex Mono drafting labels.
 
 - **Itinerary** — day-by-day ledger timeline, pre-loaded with a working
-  blueprint: Copenhagen → Stockholm → Oslo → the Bergen Line
-- **Calendar** — March + April grids with plan-density dots; click a day for details
-- **Map** — paper-toned Leaflet plate; anything with a `lat`/`lng` gets a keyed
-  ink pin (FL/FD/SG/…), bases are joined by an animated route line
+  blueprint: Copenhagen → Stockholm → Oslo → the Bergen Line. Each city gets a
+  chapter divider and every planned day gets a **drifting filmstrip of real
+  photographs** of its places (pause on hover)
+- **Calendar** — March + April grids with plan-density dots; click a day for
+  details (with its photo strip)
+- **Map** — Google Maps, custom-styled to the paper palette, with keyed ink
+  pins (FL/FD/SG/…), an animated dashed route between bases, and photo popups
+- **Photos** — pulled automatically per place name: Google place photography
+  when a key is configured, Wikipedia/Wikimedia otherwise. Cached per session
 - **Export** — one click produces a real `.docx` Word document of the whole trip
 - **＋ Add** — quick-add plans from the browser (saved to `localStorage`), then fold them into the repo with **Sync local changes**
+
+## Google Maps + Google place photos (one key, 2 minutes)
+
+The map and the photo strips are at their best with a Google Maps API key:
+
+1. [console.cloud.google.com](https://console.cloud.google.com) → create a project
+2. Enable **Maps JavaScript API** and **Places API**
+3. Credentials → **Create API key**
+4. Restrict it: *Application restrictions → Websites* → add your Render URL
+   (plus `localhost:8000` for previews)
+5. Paste it into [`data/config.js`](data/config.js), commit, push
+
+A referrer-restricted browser key is public by design, so committing it is
+fine. The free tier covers this site's traffic thousands of times over.
+
+**Without a key nothing breaks** — the map falls back to the Leaflet/OSM
+plate and photos come from Wikipedia/Wikimedia instead.
 
 ## Where the data lives
 

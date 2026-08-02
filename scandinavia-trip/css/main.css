@@ -332,6 +332,71 @@ code {
 }
 .event-x:hover { color: var(--danger); text-decoration: line-through; }
 
+/* ---------- photo strips ----------
+   A doubled track drifts left forever; translateX(-50%) loops
+   seamlessly because the second half repeats the first. */
+.strip {
+  overflow: hidden; position: relative; margin-top: 18px;
+  border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline);
+  padding: 14px 0; min-height: 0;
+  opacity: 0; transition: opacity 0.8s var(--ease);
+}
+.strip.ready { opacity: 1; }
+.strip::before, .strip::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none;
+}
+.strip::before { left: 0; background: linear-gradient(90deg, var(--paper), transparent); }
+.strip::after { right: 0; background: linear-gradient(270deg, var(--paper), transparent); }
+.strip-track {
+  display: flex; align-items: flex-start; gap: 14px; width: max-content;
+  animation: strip-drift 60s linear infinite;
+}
+.strip:hover .strip-track { animation-play-state: paused; }
+@keyframes strip-drift { to { transform: translateX(-50%); } }
+
+.frame {
+  flex: none; background: var(--paper-card); border: 1px solid var(--ink);
+  border-radius: 2px; padding: 5px 5px 4px;
+  box-shadow: 2px 2px 0 rgba(28, 25, 20, 0.14);
+  transition: transform var(--speed) var(--ease), box-shadow var(--speed) var(--ease);
+}
+.frame:hover { transform: translateY(-3px); box-shadow: 3px 5px 0 rgba(28, 25, 20, 0.18); }
+.frame img {
+  display: block; height: 128px; width: auto; max-width: 240px; object-fit: cover;
+  filter: sepia(0.12) contrast(0.98) saturate(0.85);
+}
+.frame figcaption {
+  font-family: var(--mono); font-size: 0.56rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
+  padding: 5px 2px 1px; max-width: 240px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.strip-wide { padding: 16px 0; }
+.strip-wide .frame img { height: 210px; max-width: 340px; }
+.strip-wide .frame figcaption { max-width: 340px; }
+
+/* ---------- chapter dividers ---------- */
+.chapter { margin: 46px 0 26px; }
+.chapter:first-child { margin-top: 8px; }
+.chapter-head {
+  display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+  border-top: 3px double var(--ink); padding-top: 16px;
+}
+.chapter-no {
+  font-family: var(--mono); font-size: 0.64rem; font-weight: 600;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--paper);
+  background: var(--ink); padding: 5px 10px; border-radius: 2px;
+}
+.chapter-name {
+  font-family: var(--display); font-weight: 900; font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1; letter-spacing: -0.01em; text-transform: uppercase;
+}
+.chapter-sub {
+  font-family: var(--mono); font-size: 0.66rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint);
+}
+.chapter .strip { border-bottom: 0; }
+
 /* ---------- ideas ---------- */
 .ideas { margin-top: 64px; }
 .ideas .section-title { border-bottom: 1px solid var(--ink); padding-bottom: 8px; }
@@ -449,6 +514,25 @@ code {
 }
 .route-line { stroke-dasharray: 2 8; stroke-linecap: round; animation: route-dash 1.4s linear infinite; }
 @keyframes route-dash { to { stroke-dashoffset: -10; } }
+
+/* popup photography (both map providers) */
+.popup-photo-slot:empty { display: none; }
+.popup-photo {
+  display: block; width: 230px; max-width: 100%; margin-top: 9px;
+  border: 1px solid var(--ink); border-radius: 2px;
+  filter: sepia(0.12) contrast(0.98) saturate(0.85);
+}
+
+/* Google Maps InfoWindow, restyled as paper */
+.gm-style .gm-style-iw-c {
+  background: var(--paper-card) !important; border-radius: 2px !important;
+  border: 1px solid var(--ink); box-shadow: 3px 3px 0 rgba(28, 25, 20, 0.18) !important;
+  padding: 12px 16px !important;
+}
+.gm-style .gm-style-iw-d { overflow: auto !important; }
+.gm-style .gm-style-iw-tc::after { background: var(--paper-card); }
+.gm-style .gm-ui-hover-effect { top: 0 !important; right: 0 !important; }
+.gpopup { font-family: var(--body); color: var(--ink); }
 
 .map-empty[hidden] { display: none; }
 .map-empty {
@@ -577,4 +661,7 @@ code {
   .reveal { opacity: 1; transform: none; }
   .route-path { stroke-dashoffset: 0; }
   .route-stop, .route-label, .route-sublabel { opacity: 1; }
+  .strip { overflow-x: auto; }
+  .strip-track { animation: none; }
+  .strip.ready { opacity: 1; }
 }
