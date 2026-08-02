@@ -9,15 +9,16 @@
   var TRIP = window.TRIP;
   var LS_KEY = "scandi27.local.v1";
 
+  /* Drafting-key legend: each type gets a two-letter mono key, printed in ink. */
   var TYPES = {
-    flight:  { label: "Flight",       color: "#7dd3fc" },
-    transit: { label: "Transit",      color: "#94a3b8" },
-    lodging: { label: "Lodging",      color: "#a78bfa" },
-    food:    { label: "Food & drink", color: "#fbbf24" },
-    sight:   { label: "Sight",        color: "#5eead4" },
-    museum:  { label: "Museum",       color: "#f0abfc" },
-    nature:  { label: "Nature",       color: "#4ade80" },
-    other:   { label: "Plan",         color: "#e2e8f0" },
+    flight:  { key: "FL", label: "Flight" },
+    transit: { key: "TR", label: "Transit" },
+    lodging: { key: "LO", label: "Lodging" },
+    food:    { key: "FD", label: "Food & drink" },
+    sight:   { key: "SG", label: "Sight" },
+    museum:  { key: "MU", label: "Museum" },
+    nature:  { key: "NA", label: "Nature" },
+    other:   { key: "NB", label: "Plan" },
   };
 
   /* ---------------- utils ---------------- */
@@ -117,14 +118,15 @@
   function eventHTML(ev) {
     var type = TYPES[ev.type] || TYPES.other;
     var html = '<li class="event">';
-    html += '<div class="event-time">' + (ev.time ? esc(ev.time) : "all day") + "</div>";
+    html += '<div class="event-time">' + (ev.time ? esc(ev.time) : "—") + "</div>";
+    html += '<span class="key-chip" title="' + esc(type.label) + '">' + type.key + "</span>";
     html += "<div>";
-    html += '<div class="event-title"><span class="type-dot" style="background:' + type.color + '"></span>' + esc(ev.title);
+    html += '<div class="event-title">' + esc(ev.title);
     if (ev._local) html += '<span class="badge badge-local">local</span>';
     if (ev._local) html += '<button class="event-x" data-local-idx="' + ev._localIdx + '" title="Remove this local plan">remove</button>';
     html += "</div>";
     if (ev.location && ev.location.name) {
-      html += '<div class="event-place">📍 ' + esc(ev.location.name);
+      html += '<div class="event-place">LOC · ' + esc(ev.location.name);
       if (ev.link) html += ' · <a href="' + esc(ev.link) + '" target="_blank" rel="noopener">link ↗</a>';
       html += "</div>";
     } else if (ev.link) {
@@ -281,20 +283,21 @@
   var map = null;
   var mapLayer = null;
 
-  function pinIcon(color) {
+  function pinIcon(key, isBase) {
+    var size = isBase ? 28 : 24;
     return L.divIcon({
-      className: "pin",
-      html: '<div style="color:' + color + '"><div class="pin-pulse"></div><div class="pin-dot"></div></div>',
-      iconSize: [14, 14],
-      iconAnchor: [7, 7],
-      popupAnchor: [0, -10],
+      className: "pin" + (isBase ? " pin-base" : ""),
+      html: '<div style="position:relative"><div class="pin-pulse"></div><div class="pin-key">' + key + "</div></div>",
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
+      popupAnchor: [0, -size / 2 - 4],
     });
   }
 
   function initMap() {
     if (map) return;
     map = L.map("map", { zoomControl: true, scrollWheelZoom: true, attributionControl: true });
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: "abcd",
       maxZoom: 19,
@@ -311,10 +314,10 @@
 
     (TRIP.bases || []).forEach(function (base) {
       if (!isFinite(base.lat) || !isFinite(base.lng)) return;
-      var m = L.marker([base.lat, base.lng], { icon: pinIcon("#5eead4") });
+      var m = L.marker([base.lat, base.lng], { icon: pinIcon("BA", true), zIndexOffset: 500 });
       var sub = [base.country, base.arrive && base.depart ? fmtShort(base.arrive) + " → " + fmtShort(base.depart) : ""]
         .filter(Boolean).join(" · ");
-      m.bindPopup('<div class="popup-title">🏠 ' + esc(base.name) + '</div><div class="popup-sub">' + esc(sub) + "</div>" +
+      m.bindPopup('<div class="popup-title">BASE — ' + esc(base.name) + '</div><div class="popup-sub">' + esc(sub) + "</div>" +
                   (base.lodging ? '<div class="popup-sub">' + esc(base.lodging) + "</div>" : ""));
       m.addTo(mapLayer);
       points.push([base.lat, base.lng]);
@@ -323,7 +326,7 @@
     var basePts = points.slice();
     if (basePts.length > 1) {
       L.polyline(basePts, {
-        color: "#7dd3fc", weight: 2.5, opacity: 0.8, className: "route-line",
+        color: "#1c1914", weight: 2, opacity: 0.85, className: "route-line",
       }).addTo(mapLayer);
     }
 
@@ -332,11 +335,11 @@
         var loc = ev.location;
         if (!loc || !isFinite(loc.lat) || !isFinite(loc.lng)) return;
         var type = TYPES[ev.type] || TYPES.other;
-        var m = L.marker([loc.lat, loc.lng], { icon: pinIcon(type.color) });
+        var m = L.marker([loc.lat, loc.lng], { icon: pinIcon(type.key) });
         m.bindPopup('<div class="popup-title">' + esc(ev.title) + '</div>' +
                     '<div class="popup-sub">Day ' + (i + 1) + " · " + fmtShort(day.date) +
                     (ev.time ? " · " + esc(ev.time) : "") + "</div>" +
-                    (loc.name ? '<div class="popup-sub">📍 ' + esc(loc.name) + "</div>" : ""));
+                    (loc.name ? '<div class="popup-sub">LOC · ' + esc(loc.name) + "</div>" : ""));
         m.addTo(mapLayer);
         points.push([loc.lat, loc.lng]);
       });
@@ -348,15 +351,18 @@
       empty.hidden = false;
     } else {
       empty.hidden = true;
-      if (points.length === 1) map.setView(points[0], 11);
-      else map.fitBounds(points, { padding: [46, 46] });
+      /* Fit to the European leg — a Chicago departure pin would zoom the
+         whole Atlantic into frame and crush the useful detail. */
+      var fitPts = points.filter(function (p) { return p[1] > -20; });
+      if (!fitPts.length) fitPts = points;
+      if (fitPts.length === 1) map.setView(fitPts[0], 11);
+      else map.fitBounds(fitPts, { padding: [46, 46] });
     }
 
-    var legendTypes = Object.keys(TYPES);
     $("#map-legend").innerHTML =
-      '<span class="leg"><span class="type-dot" style="background:#5eead4"></span>Base</span>' +
-      legendTypes.map(function (key) {
-        return '<span class="leg"><span class="type-dot" style="background:' + TYPES[key].color + '"></span>' + TYPES[key].label + "</span>";
+      '<span class="leg"><span class="key-chip">BA</span>Base</span>' +
+      Object.keys(TYPES).map(function (t) {
+        return '<span class="leg"><span class="key-chip">' + TYPES[t].key + "</span>" + TYPES[t].label + "</span>";
       }).join("");
   }
 

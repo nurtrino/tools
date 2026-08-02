@@ -3,9 +3,14 @@
 A self-contained static site (no build step, no external CDNs) for planning the
 Chicago → Scandinavia trip, **March 26 – April 5, 2027**.
 
-- **Itinerary** — animated day-by-day timeline
+Designed like a printed field itinerary: warm paper, ink hairlines, Fraunces
+display type, Newsreader text, IBM Plex Mono drafting labels.
+
+- **Itinerary** — day-by-day ledger timeline, pre-loaded with a working
+  blueprint: Copenhagen → Stockholm → Oslo → the Bergen Line
 - **Calendar** — March + April grids with plan-density dots; click a day for details
-- **Map** — dark Leaflet map; anything with a `lat`/`lng` gets a pulsing pin, bases are joined by an animated route line
+- **Map** — paper-toned Leaflet plate; anything with a `lat`/`lng` gets a keyed
+  ink pin (FL/FD/SG/…), bases are joined by an animated route line
 - **Export** — one click produces a real `.docx` Word document of the whole trip
 - **＋ Add** — quick-add plans from the browser (saved to `localStorage`), then fold them into the repo with **Sync local changes**
 
@@ -66,7 +71,7 @@ python3 -m http.server 8000
 
 - [Leaflet 1.9.4](https://leafletjs.com) — `vendor/leaflet/`
 - [docx 9.5.1](https://docx.js.org) — `vendor/docx/`
-- Space Grotesk + Inter — `fonts/` (self-hosted woff2)
+- Fraunces + Newsreader + IBM Plex Mono — `fonts/` (self-hosted woff2)
 
 Map tiles stream from CARTO/OpenStreetMap at view time; everything else is
 served from this folder.

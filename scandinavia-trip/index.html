@@ -5,19 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Scandinavia · Spring 2027</title>
   <meta name="description" content="A living itinerary — Chicago to Scandinavia, March 26 – April 5, 2027." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23f3efe5'/><text x='50' y='74' font-size='72' font-family='Georgia,serif' font-weight='bold' text-anchor='middle' fill='%231c1914'>S</text></svg>" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <link rel="stylesheet" href="css/main.css" />
 </head>
 <body>
-
-  <!-- Animated aurora backdrop -->
-  <div class="sky" aria-hidden="true">
-    <div class="stars"></div>
-    <div class="aurora aurora-1"></div>
-    <div class="aurora aurora-2"></div>
-    <div class="aurora aurora-3"></div>
-  </div>
 
   <header class="topbar">
     <a class="brand" href="#top">SCANDINAVIA<span class="brand-tick">·27</span></a>
@@ -34,19 +26,43 @@
   </header>
 
   <section class="hero" id="top">
-    <p class="hero-eyebrow reveal">ORD&nbsp;&nbsp;✈&nbsp;&nbsp;THE&nbsp;NORTH</p>
-    <h1 class="hero-title" id="hero-title" aria-label="Scandinavia">Scandinavia</h1>
-    <p class="hero-dates reveal">March 26 — April 5, 2027</p>
-    <div class="countdown reveal" id="countdown" aria-label="Countdown to departure">
-      <div class="count-cell"><span class="count-num" id="cd-days">—</span><span class="count-label">days</span></div>
-      <div class="count-sep">:</div>
-      <div class="count-cell"><span class="count-num" id="cd-hours">—</span><span class="count-label">hours</span></div>
-      <div class="count-sep">:</div>
-      <div class="count-cell"><span class="count-num" id="cd-mins">—</span><span class="count-label">min</span></div>
-      <div class="count-sep">:</div>
-      <div class="count-cell"><span class="count-num" id="cd-secs">—</span><span class="count-label">sec</span></div>
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Field Itinerary · No. 1 · Eleven Days</p>
+      <h1 class="hero-title" id="hero-title" aria-label="Scandinavia">Scandinavia</h1>
+      <p class="hero-dek">Being a complete working plan for eleven days in the North —
+        Copenhagen, Stockholm, Oslo &amp; the rails to Bergen.</p>
+      <p class="hero-dates">March 26 — April 5, 2027</p>
+
+      <div class="route" aria-hidden="true">
+        <svg viewBox="0 0 700 100">
+          <path class="route-path" d="M30,52 C 90,24 170,24 230,48 S 340,68 390,48 S 480,30 530,48 S 620,66 660,44" />
+          <circle class="route-stop" cx="30"  cy="52" r="4.5" style="animation-delay:0.6s" />
+          <circle class="route-stop" cx="230" cy="48" r="4.5" style="animation-delay:1.2s" />
+          <circle class="route-stop" cx="390" cy="48" r="4.5" style="animation-delay:1.8s" />
+          <circle class="route-stop" cx="530" cy="48" r="4.5" style="animation-delay:2.4s" />
+          <circle class="route-stop" cx="660" cy="44" r="4.5" style="animation-delay:3.0s" />
+          <text class="route-label" x="30"  y="76" text-anchor="middle" style="animation-delay:0.7s">ORD</text>
+          <text class="route-label" x="230" y="72" text-anchor="middle" style="animation-delay:1.3s">CPH</text>
+          <text class="route-label" x="390" y="72" text-anchor="middle" style="animation-delay:1.9s">STO</text>
+          <text class="route-label" x="530" y="72" text-anchor="middle" style="animation-delay:2.5s">OSL</text>
+          <text class="route-label" x="660" y="68" text-anchor="middle" style="animation-delay:3.1s">BGO</text>
+          <text class="route-sublabel" x="30"  y="88" text-anchor="middle" style="animation-delay:0.7s">CHICAGO</text>
+          <text class="route-sublabel" x="230" y="84" text-anchor="middle" style="animation-delay:1.3s">COPENHAGEN</text>
+          <text class="route-sublabel" x="390" y="84" text-anchor="middle" style="animation-delay:1.9s">STOCKHOLM</text>
+          <text class="route-sublabel" x="530" y="84" text-anchor="middle" style="animation-delay:2.5s">OSLO</text>
+          <text class="route-sublabel" x="660" y="80" text-anchor="middle" style="animation-delay:3.1s">BERGEN</text>
+        </svg>
+      </div>
+
+      <div class="countdown" id="countdown" aria-label="Countdown to departure">
+        <div class="count-cell"><span class="count-num" id="cd-days">—</span><span class="count-label">days</span></div>
+        <div class="count-cell"><span class="count-num" id="cd-hours">—</span><span class="count-label">hours</span></div>
+        <div class="count-cell"><span class="count-num" id="cd-mins">—</span><span class="count-label">min</span></div>
+        <div class="count-cell"><span class="count-num" id="cd-secs">—</span><span class="count-label">sec</span></div>
+      </div>
     </div>
-    <div class="scroll-cue" aria-hidden="true"><span></span></div>
+
+    <div class="stamp" aria-hidden="true">Spring Break<br />MMXXVII<br />· Approved ·</div>
   </section>
 
   <main id="main">

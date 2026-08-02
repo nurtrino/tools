@@ -5,9 +5,9 @@
 (function () {
   "use strict";
 
-  var INK = "1F2A3D";
-  var DIM = "5A6B85";
-  var ACCENT = "0E9F8A";
+  var INK = "1C1914";
+  var DIM = "6B6357";
+  var ACCENT = "1C1914";
 
   function fmtDate(iso) {
     var p = iso.split("-");
@@ -32,7 +32,7 @@
       margins: { top: 90, bottom: 90, left: 120, right: 120 },
       borders: {
         top: { style: D.BorderStyle.NONE },
-        bottom: { style: D.BorderStyle.SINGLE, size: 4, color: "D9E1EE" },
+        bottom: { style: D.BorderStyle.SINGLE, size: 4, color: "C9C2B2" },
         left: { style: D.BorderStyle.NONE },
         right: { style: D.BorderStyle.NONE },
       },
@@ -47,7 +47,7 @@
 
   function run(text, opts) {
     var D = window.docx;
-    return new D.TextRun(Object.assign({ text: text, font: "Calibri", size: 21, color: INK }, opts || {}));
+    return new D.TextRun(Object.assign({ text: text, font: "Georgia", size: 21, color: INK }, opts || {}));
   }
 
   function eventRow(ev) {
@@ -62,7 +62,7 @@
       body.push(para([run(subBits.join("  ·  "), { color: ACCENT, size: 18 })]));
     }
     if (ev.notes) body.push(para([run(ev.notes, { color: DIM, size: 19, italics: true })]));
-    if (ev.link) body.push(para([run(ev.link, { color: "2B6CB0", size: 17 })]));
+    if (ev.link) body.push(para([run(ev.link, { color: "6B6357", size: 17 })]));
 
     return new D.TableRow({
       children: [
@@ -77,7 +77,7 @@
     var kids = [];
 
     kids.push(new D.Paragraph({
-      children: [new D.TextRun({ text: (trip.meta.title || "Trip").toUpperCase(), bold: true, size: 72, color: INK, font: "Calibri Light" })],
+      children: [new D.TextRun({ text: (trip.meta.title || "Trip").toUpperCase(), bold: true, size: 72, color: INK, font: "Georgia" })],
       spacing: { after: 60 },
     }));
     kids.push(para([run(trip.meta.subtitle || "", { color: ACCENT, size: 26, bold: true })], { spacing: { after: 40 } }));
@@ -89,7 +89,7 @@
     days.forEach(function (day, i) {
       var heading = "Day " + (i + 1) + "  ·  " + fmtDate(day.date);
       kids.push(new D.Paragraph({
-        children: [new D.TextRun({ text: heading, bold: true, size: 28, color: INK, font: "Calibri Light" })],
+        children: [new D.TextRun({ text: heading, bold: true, size: 28, color: INK, font: "Georgia" })],
         spacing: { before: 320, after: 40 },
         border: { bottom: { style: D.BorderStyle.SINGLE, size: 8, color: ACCENT, space: 4 } },
       }));
@@ -109,7 +109,7 @@
 
     if (trip.ideas && trip.ideas.length) {
       kids.push(new D.Paragraph({
-        children: [new D.TextRun({ text: "Idea shelf", bold: true, size: 28, color: INK, font: "Calibri Light" })],
+        children: [new D.TextRun({ text: "Idea shelf", bold: true, size: 28, color: INK, font: "Georgia" })],
         spacing: { before: 400, after: 80 },
         border: { bottom: { style: D.BorderStyle.SINGLE, size: 8, color: ACCENT, space: 4 } },
       }));
