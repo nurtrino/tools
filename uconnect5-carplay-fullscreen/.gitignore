@@ -1,0 +1,16 @@
+# Never commit OEM firmware, extracted filesystems, or proprietary APKs/binaries.
+*.upd
+*.upd.md5
+*.zip
+*.img
+*.bin
+*.squashfs
+*.ext4
+extracted/
+firmware/
+KaliSWDL.log
+checksums/
+*.apk
+*.dex
+__pycache__/
+*.pyc
