@@ -48,3 +48,28 @@ shows.
 - Next question this raises: is there an equivalent public extraction of
   an *R1L or later* (Android-based) unit anywhere? Worth a targeted search
   before assuming we're starting from zero on the container format.
+
+### 2026-08-04 (later same day)
+
+- Platform / version string: R1L (per web search, not our own unit yet)
+- What we looked at: web search only, following up on the open question
+  above. No direct file access — this needs re-verification once we have
+  our own extracted APKs, treat as a lead, not confirmed fact.
+- What we found: XDA community members (in the "FCA R1L Android
+  vulnerability" thread) report having decompiled real R1L APKs and
+  identified package names, including:
+  - `com.tomtom.r1navapp` — navigation
+  - `com.allgo.mediabrowserservice` — media playback
+  - `com.mitsubishielectric.ahu.app.climate` ("ClimateHMI") — air
+    conditioning / climate control HMI
+  - Resolves an earlier loose end: "Mitsubishi Electric" showed up in a
+    search result alongside R1L without clear context — it's the supplier
+    of this specific climate-HMI component, not the whole platform (Harman
+    is still the overall integrator).
+- Next question this raises: `com.mitsubishielectric.ahu.app.climate` is
+  the strongest lead so far for **the bottom bar** specifically (it
+  matches "climate controls kept reachable" exactly). No equivalent lead
+  yet for the **top bar** — likely owned by Harman's own launcher/status
+  bar package rather than a third-party HMI app; worth searching
+  specifically for that once we're decompiling real files, since a status
+  bar is usually part of the system UI rather than a separate vendor app.
