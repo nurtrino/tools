@@ -4,6 +4,29 @@ Everything downstream (which exploit threads are relevant, which firmware
 package to pull, which APK to decompile) depends on this. Fill this in
 before anything else.
 
+## The actual build (confirmed)
+
+Base vehicle: 2018 Jeep Grand Cherokee (WK2). Retrofitted with a Uconnect 5
+module believed to be from a 2022 Jeep, paired with a **Durango** 10.1"
+screen (not a RAM screen — earlier notes in this project incorrectly said
+RAM; corrected here). This matches a documented community swap ("Uconnect 5
+swapped into my WK2", Jeep Garage Forums), whose standard parts list is an
+OEM 2019-2022 WK2 UAV 8.4" screen/bezel *or* a Pacifica/Durango 10.1" screen
+with a 2021+ Durango radio module. Built by someone else (bought
+already-installed), so exact internal wiring (direct LVDS vs. an
+adapter/scaler board) isn't known firsthand yet.
+
+Because this is a known, documented combination rather than an exotic
+hybrid, the top+bottom bars boxing in CarPlay are most likely just the
+**standard Uconnect 5 HMI layout** on this Durango-sourced module (status
+bar top, climate bar bottom) — not a screen/resolution mismatch artifact.
+That puts us back on the original plan (find what owns those bars and how
+to change it), now with a real platform to target instead of a guess. One
+open question worth resolving early: a Durango module's platform code may
+not be `R1L` (that's specifically the Jeep/Fiat/Chrysler-branded platform
+naming) — Durango is a Dodge product, so its own version-string platform
+code needs checking directly rather than assumed.
+
 ## From the Uconnect screen (no tools needed)
 
 1. Go to **Settings → System Information** (exact path varies slightly by
